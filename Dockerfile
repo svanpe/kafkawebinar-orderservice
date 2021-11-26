@@ -1,5 +1,5 @@
-FROM openjdk:8-jdk-alpine AS build
-RUN apk add --no-cache curl tar bash procps gettext
+FROM adoptopenjdk/openjdk11 AS build
+#RUN apk add --no-cache curl tar bash procps gettext
 
 # Downloading and installing Maven
 # 1- Define a constant with the version of maven you want to install
@@ -37,6 +37,6 @@ RUN mvn verify clean --fail-never
 COPY ./src /app/src
 RUN mvn install
 
-FROM java:8-jdk-alpine
+FROM adoptopenjdk/openjdk11
 COPY --from=build /app/target/project-reporting*.jar /reporting.jar
 ENTRYPOINT ["java", "-jar", "reporting.jar"]
