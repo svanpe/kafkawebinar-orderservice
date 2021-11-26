@@ -9,9 +9,9 @@ public class SwaggerConfig {
     @Bean
     public GroupedOpenApi OrderApi() {
         return GroupedOpenApi.builder()
-                .group("be.tobania.demo.kafka.orderService.model")
+                .group("order-service")
                 .packagesToScan("be.tobania.demo.kafka.orderService.controller")
-                .pathsToMatch("/")
+                .pathsToMatch("/order/***")
                 .build();
     }
 

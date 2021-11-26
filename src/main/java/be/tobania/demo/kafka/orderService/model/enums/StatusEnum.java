@@ -19,6 +19,7 @@ public enum StatusEnum {
 private StatusEnum(String value){
     this.value = value;
 }
+
     public static StatusEnum fromValue(String text) {
         for (StatusEnum b : values()) {
             if (String.valueOf(b.value).equals(text)) {

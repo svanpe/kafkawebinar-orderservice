@@ -20,7 +20,6 @@ public class CustomerEntity {
     private String password;
 
    @OneToMany(mappedBy = "customerEntity", cascade = CascadeType.ALL)
-   @Transient
    private List<OrderEntity> orders;
 
 }

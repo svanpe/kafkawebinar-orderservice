@@ -1,11 +1,9 @@
 package be.tobania.demo.kafka.orderService.service;
 
-import be.tobania.demo.kafka.orderService.entities.CustomerEntity;
 import be.tobania.demo.kafka.orderService.entities.OrderEntity;
 import be.tobania.demo.kafka.orderService.model.Order;
 import be.tobania.demo.kafka.orderService.model.OrderForPatch;
 import be.tobania.demo.kafka.orderService.model.enums.StatusEnum;
-import be.tobania.demo.kafka.orderService.repository.CustormerRepository;
 import be.tobania.demo.kafka.orderService.repository.OrderRepository;
 import be.tobania.demo.kafka.orderService.service.mapper.OrderApiEntityMapper;
 import be.tobania.demo.kafka.orderService.service.mapper.OrderEntityApiMapper;
@@ -22,7 +20,6 @@ import java.util.stream.Collectors;
 public class OrderService {
 
     public final OrderRepository orderRepository;
-    public final CustormerRepository custormerRepository;
 
     @Transactional
     public Order createOrder(Order order) {
@@ -34,9 +31,10 @@ public class OrderService {
         return OrderEntityApiMapper.mapOrder(saveOrder);
     }
 
+    @Transactional
     public List<Order> getOrdersByStatus(StatusEnum status) {
 
-        List<OrderEntity> orderEntities = orderRepository.findOrderByStatus(StatusEnum.fromValue(status.name()));
+        List<OrderEntity> orderEntities = orderRepository.findOrderEntitiesByStatus(status.getValue());
         if (orderEntities == null || orderEntities.isEmpty()) {
             throw new RuntimeException("No order for the given status");
         }
@@ -45,6 +43,7 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public Order patchOrder(OrderForPatch orderForPatch, Long orderId) {
 
         OrderEntity orderEntity = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("No order for this id"));
@@ -54,6 +53,15 @@ public class OrderService {
         OrderEntity patchOrder = orderRepository.save(orderEntity);
 
         return OrderEntityApiMapper.mapOrder(patchOrder);
+    }
+
+
+    @Transactional
+    public Order getOrdersById(Long orderId) {
+
+        OrderEntity orderEntities = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("No order for the given status"));
+        return OrderEntityApiMapper.mapOrder(orderEntities);
     }
 
 }

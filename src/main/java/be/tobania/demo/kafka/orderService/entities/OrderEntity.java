@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class OrderEntity {
 
     @Id
@@ -20,7 +21,6 @@ public class OrderEntity {
     private LocalDate creationDate;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "customerEntity_id")
     private CustomerEntity customerEntity;
 
     private String status;
@@ -28,6 +28,4 @@ public class OrderEntity {
     @OneToMany(mappedBy ="orderEntity" ,cascade = CascadeType.ALL)
     private List<OrderItemEntity> orderItems;
 
-    public OrderEntity(){
-    }
 }

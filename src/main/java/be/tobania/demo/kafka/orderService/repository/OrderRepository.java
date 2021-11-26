@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
 
-    public List<OrderEntity> findOrderByStatus(StatusEnum statusEnum);
+    public List<OrderEntity> findOrderEntitiesByStatus(String statusEnum);
 }
