@@ -25,7 +25,7 @@ public class OrderEntity {
 
     private String status;
 
-    @OneToMany(mappedBy ="orderEntity" ,cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER ,cascade = CascadeType.ALL)
     private List<OrderItemEntity> orderItems;
 
 }
