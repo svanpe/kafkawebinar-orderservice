@@ -52,7 +52,7 @@ public class OrderController {
             @ApiResponse(code = 200, message = "successful operation", response = Order.class, responseContainer = "List"),
             @ApiResponse(code = 400, message = "Invalid tag value")})
     @GetMapping(value = "/findByCustomer",
-            produces = {"application/xml"})
+            produces = {"application/json"})
     public Order findOrderPerCustomer(@RequestParam(name = "customerRef", required = true) String customerRef) {
         return null;
     }

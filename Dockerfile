@@ -35,8 +35,9 @@ WORKDIR /app
 COPY pom.xml /app
 RUN mvn verify clean --fail-never
 COPY ./src /app/src
-RUN mvn install
+RUN mvn clean install
+EXPOSE 8081
 
 FROM adoptopenjdk/openjdk11
-COPY --from=build /app/target/project-reporting*.jar /reporting.jar
-ENTRYPOINT ["java", "-jar", "reporting.jar"]
+COPY --from=build /app/target/order-service*.jar /order-service.jar
+ENTRYPOINT ["java", "-jar", "order-service.jar"]
