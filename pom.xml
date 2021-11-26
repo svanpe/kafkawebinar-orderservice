@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>be.tobania.demo.kafka</groupId>
-	<artifactId>orderService</artifactId>
+	<artifactId>order-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ordersService</name>
 	<description>handling order within web shop</description>
