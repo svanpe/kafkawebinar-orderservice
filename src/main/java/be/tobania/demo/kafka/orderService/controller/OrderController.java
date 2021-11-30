@@ -24,6 +24,7 @@ public class OrderController {
 
     private final OrderService orderService;
 
+
     @ApiOperation(value = "Add a new order", nickname = "addOrder")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "successful operation", response = Order.class),
@@ -33,7 +34,9 @@ public class OrderController {
             method = RequestMethod.POST)
     public Order addOrder(@Valid @RequestBody @NotNull Order order) {
         log.info("add new order");
-        return orderService.createOrder(order);
+        Order addedOrder = orderService.createOrder(order);
+
+        return order;
     }
 
     @ApiOperation(value = "Finds Orders by status", nickname = "findOrdersByStatus", notes = "Multiple status values can be provided with comma separated strings")
@@ -53,8 +56,8 @@ public class OrderController {
             @ApiResponse(code = 400, message = "Invalid tag value")})
     @GetMapping(value = "/findByCustomer",
             produces = {"application/json"})
-    public Order findOrderPerCustomer(@RequestParam(name = "customerRef", required = true) String customerRef) {
-        return null;
+    public List<Order> findOrderPerCustomer(@RequestParam(name = "customerRef", required = true) Long customerRef) {
+        return orderService.getOrderByCustomer(customerRef);
     }
 
     @ApiOperation(value = "Update the status of an existing order", nickname = "updateOrderStatus")
