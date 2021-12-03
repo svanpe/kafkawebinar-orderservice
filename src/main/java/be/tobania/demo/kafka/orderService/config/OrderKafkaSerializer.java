@@ -22,12 +22,12 @@ public class OrderKafkaSerializer implements Serializer<Order> {
 
     @Override
     public byte[] serialize(String topic, Order data) {
-
+        try {
             if (data == null){
                 log.info("Data to serialized is null");
                 return null;
             }
-        try {
+            log.info("Serializing...");
             objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
             objectMapper.registerModule(new JavaTimeModule());
            return objectMapper.writeValueAsBytes(data);
