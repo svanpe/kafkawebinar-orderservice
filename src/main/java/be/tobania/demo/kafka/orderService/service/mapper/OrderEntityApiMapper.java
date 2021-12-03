@@ -22,7 +22,6 @@ public class OrderEntityApiMapper {
         customer.setEmail(order.getCustomerEntity().getEmail());
         customer.setFirstName(order.getCustomerEntity().getFirstName());
         customer.setLastName(order.getCustomerEntity().getLastName());
-        customer.setPassword(order.getCustomerEntity().getPassword());
 
        List<OrderItem> orderItemList = order.getOrderItems().stream().map(item->{
             OrderItem orderItem = new OrderItem();
