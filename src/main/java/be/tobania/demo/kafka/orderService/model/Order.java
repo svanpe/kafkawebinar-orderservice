@@ -1,10 +1,6 @@
 package be.tobania.demo.kafka.orderService.model;
 
-import be.tobania.demo.kafka.orderService.model.enums.StatusEnum;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import be.tobania.demo.kafka.orderService.model.enums.OrderStatus;
 import io.swagger.annotations.ApiModel;
 import lombok.*;
 import org.springframework.validation.annotation.Validated;
@@ -25,7 +21,7 @@ public class Order {
 
     private Customer customer;
 
-    private StatusEnum status;
+    private OrderStatus status;
 
     private List<OrderItem> orderItems;
 }

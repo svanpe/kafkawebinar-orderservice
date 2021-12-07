@@ -1,7 +1,6 @@
 package be.tobania.demo.kafka.orderService.model;
 
-import be.tobania.demo.kafka.orderService.model.enums.StatusEnum;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import be.tobania.demo.kafka.orderService.model.enums.OrderStatus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,6 +13,6 @@ import org.springframework.validation.annotation.Validated;
 @NoArgsConstructor
 public class OrderForPatch {
 
-    private StatusEnum status;
+    private OrderStatus status;
 
 }

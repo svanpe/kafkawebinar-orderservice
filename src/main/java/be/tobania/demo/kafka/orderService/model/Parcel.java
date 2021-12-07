@@ -1,6 +1,6 @@
 package be.tobania.demo.kafka.orderService.model;
 
-import be.tobania.demo.kafka.shippingService.model.enums.ParcelStatus;
+import be.tobania.demo.kafka.orderService.model.enums.ParcelStatus;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.NoArgsConstructor;

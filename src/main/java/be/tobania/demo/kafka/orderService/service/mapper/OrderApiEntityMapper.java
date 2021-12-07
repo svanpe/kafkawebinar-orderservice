@@ -5,8 +5,6 @@ import be.tobania.demo.kafka.orderService.entities.OrderEntity;
 import be.tobania.demo.kafka.orderService.entities.OrderItemEntity;
 import be.tobania.demo.kafka.orderService.entities.ProductEntity;
 import be.tobania.demo.kafka.orderService.model.Order;
-import be.tobania.demo.kafka.orderService.model.enums.StatusEnum;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

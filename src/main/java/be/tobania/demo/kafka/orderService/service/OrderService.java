@@ -3,17 +3,22 @@ package be.tobania.demo.kafka.orderService.service;
 import be.tobania.demo.kafka.orderService.entities.OrderEntity;
 import be.tobania.demo.kafka.orderService.model.Order;
 import be.tobania.demo.kafka.orderService.model.OrderForPatch;
-import be.tobania.demo.kafka.orderService.model.enums.StatusEnum;
+import be.tobania.demo.kafka.orderService.model.Parcel;
+import be.tobania.demo.kafka.orderService.model.Payment;
+import be.tobania.demo.kafka.orderService.model.enums.PaymentStatus;
+import be.tobania.demo.kafka.orderService.model.enums.OrderStatus;
 import be.tobania.demo.kafka.orderService.repository.OrderRepository;
 import be.tobania.demo.kafka.orderService.service.mapper.OrderApiEntityMapper;
 import be.tobania.demo.kafka.orderService.service.mapper.OrderEntityApiMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +29,9 @@ import java.util.stream.Collectors;
 public class OrderService {
 
     private static final String ORDER_TOPIC = "orders";
+    private static final String PAYMENT_TOPIC = "payments";
+    private static final String SHIPPING_TOPIC = "shipping";
+
 
     public final OrderRepository orderRepository;
 
@@ -46,7 +54,7 @@ public class OrderService {
     }
 
     @Transactional
-    public List<Order> getOrdersByStatus(StatusEnum status) {
+    public List<Order> getOrdersByStatus(OrderStatus status) {
 
         List<OrderEntity> orderEntities = orderRepository.findOrderEntitiesByStatus(status.getValue());
         if (orderEntities == null || orderEntities.isEmpty()) {
@@ -104,6 +112,26 @@ public class OrderService {
 
         log.info("order published");
 
+    }
+
+
+    @KafkaListener(topics = PAYMENT_TOPIC, groupId = "payment-service")
+    public void consumePayment(Payment payment)  {
+
+        log.info(String.format("Consumed new payment with status-> %s", payment.getStatus().name()));
+
+        if(payment.getStatus() == PaymentStatus.PAYED){
+            Order order = payment.getOrder();
+            OrderForPatch orderForPatch = new OrderForPatch();
+            orderForPatch.setStatus(OrderStatus.PAYED);
+
+            patchOrder(orderForPatch,order.getId());
+        }
+    }
+
+    @KafkaListener(topics = SHIPPING_TOPIC, groupId = "shipping-service")
+    public void consumehipping(Parcel parcel) throws IOException {
+        log.info(String.format("#### -> Consumed new order with status-> %s", parcel.getStatus().name()));
     }
 
 }

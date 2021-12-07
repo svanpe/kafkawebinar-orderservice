@@ -2,7 +2,7 @@ package be.tobania.demo.kafka.orderService.controller;
 
 import be.tobania.demo.kafka.orderService.model.Order;
 import be.tobania.demo.kafka.orderService.model.OrderForPatch;
-import be.tobania.demo.kafka.orderService.model.enums.StatusEnum;
+import be.tobania.demo.kafka.orderService.model.enums.OrderStatus;
 import be.tobania.demo.kafka.orderService.service.OrderService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -34,9 +34,7 @@ public class OrderController {
             method = RequestMethod.POST)
     public Order addOrder(@Valid @RequestBody @NotNull Order order) {
         log.info("add new order");
-        Order addedOrder = orderService.createOrder(order);
-
-        return order;
+       return orderService.createOrder(order);
     }
 
     @ApiOperation(value = "Finds Orders by status", nickname = "findOrdersByStatus", notes = "Multiple status values can be provided with comma separated strings")
@@ -45,7 +43,7 @@ public class OrderController {
             @ApiResponse(code = 400, message = "Invalid status value")})
     @GetMapping(value = "/findByStatus",
             produces = {"application/json"})
-    public List<Order> findOrdersByStatus(@NotNull @ApiParam(value = "Status values that need to be considered for filter", required = true) @Valid @RequestParam(value = "status", required = true) StatusEnum status) {
+    public List<Order> findOrdersByStatus(@NotNull @ApiParam(value = "Status values that need to be considered for filter", required = true) @Valid @RequestParam(value = "status", required = true) OrderStatus status) {
         log.info("get order by status");
         return orderService.getOrdersByStatus(status);
     }

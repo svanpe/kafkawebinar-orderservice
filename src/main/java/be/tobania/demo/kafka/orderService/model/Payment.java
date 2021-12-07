@@ -1,6 +1,6 @@
 package be.tobania.demo.kafka.orderService.model;
 
-import be.tobania.demo.kafka.paymentService.model.enums.PaymentStatus;
+import be.tobania.demo.kafka.orderService.model.enums.PaymentStatus;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.Getter;

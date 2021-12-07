@@ -4,7 +4,7 @@ package be.tobania.demo.kafka.orderService.model.enums;
 import lombok.Getter;
 
 @Getter
-public enum StatusEnum {
+public enum OrderStatus {
 
     PLACED("placed"),
 
@@ -16,12 +16,12 @@ public enum StatusEnum {
 
     private String value;
 
-private StatusEnum(String value){
+private OrderStatus(String value){
     this.value = value;
 }
 
-    public static StatusEnum fromValue(String text) {
-        for (StatusEnum b : values()) {
+    public static OrderStatus fromValue(String text) {
+        for (OrderStatus b : values()) {
             if (String.valueOf(b.value).equals(text)) {
                 return b;
             }

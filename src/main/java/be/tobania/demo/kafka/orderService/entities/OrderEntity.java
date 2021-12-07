@@ -1,6 +1,5 @@
 package be.tobania.demo.kafka.orderService.entities;
 
-import be.tobania.demo.kafka.orderService.model.enums.StatusEnum;
 import lombok.*;
 
 import javax.persistence.*;
