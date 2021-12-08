@@ -42,11 +42,11 @@ public class OrderServiceConsumerConfig {
         props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
         return new DefaultKafkaConsumerFactory<>(props,
                 new StringDeserializer(),
-                new JsonDeserializer<>(Payment.class));
+                new PaymentKafkaDeserializer());
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Payment> kafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, Payment> paymentKafkaListenerContainerFactory() {
 
         ConcurrentKafkaListenerContainerFactory<String, Payment> factory
                 = new ConcurrentKafkaListenerContainerFactory<>();
@@ -62,12 +62,11 @@ public class OrderServiceConsumerConfig {
         props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
         return new DefaultKafkaConsumerFactory<>(props,
                 new StringDeserializer(),
-                new JsonDeserializer<>(Parcel.class));
+                new ParcelKafkaDeserializer());
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Parcel>
-    userKafkaListenerContainerFactory() {
+    public ConcurrentKafkaListenerContainerFactory<String, Parcel> parcelKafkaListenerContainerFactory() {
         ConcurrentKafkaListenerContainerFactory<String, Parcel> factory
                 = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(parcelConsumerFactory());

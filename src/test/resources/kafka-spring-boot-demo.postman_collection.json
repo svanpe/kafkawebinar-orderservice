@@ -1,0 +1,388 @@
+{
+	"info": {
+		"_postman_id": "a3067024-9c1f-4f7b-9b99-7164deb50ad3",
+		"name": "kafka-spring-boot-demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "OrderService",
+			"item": [
+				{
+					"name": "addOrder",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "796092f2-3d3c-4dfa-894e-611ac93b1d96",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"creationDate\": \"2021-11-25\",\n  \"customer\": {\n    \"firstName\": \"christian\",\n    \"lastName\": \"nyabeye\",\n    \"email\": \"christian.nyabeyengatchou@tobania.be\",\n    \"password\": \"1234567\"\n  },\n  \"status\": \"PLACED\",\n  \"orderItems\": [\n    {\n      \"product\": {\n          \"name\":\"pc\",\n          \"description\":\" personal computer\"\n      },\n      \"quantity\": 1\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8082/demo/order",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"demo",
+								"order"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "patchOrder",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"PAYED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/demo/order/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"demo",
+								"order",
+								"1"
+							]
+						},
+						"description": "request to patch order"
+					},
+					"response": []
+				},
+				{
+					"name": "getOrderByStatus",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8081/demo/order/findbyStatus?status=PLACED",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"demo",
+								"order",
+								"findbyStatus"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "PLACED"
+								}
+							]
+						},
+						"description": "return order by status"
+					},
+					"response": []
+				},
+				{
+					"name": "getOrderById",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8082/demo/order/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"demo",
+								"order",
+								"1"
+							]
+						},
+						"description": "return order by status"
+					},
+					"response": []
+				},
+				{
+					"name": "getOrdereByCustomerRef",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						},
+						"description": "return order by status"
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "payment-service",
+			"item": [
+				{
+					"name": "add-payment:payed",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"creationDate\": \"2021-12-03\",\n  \"order\": {\n    \"creationDate\": \"2021-12-03\",\n    \"customer\": {\n      \"firstName\": \"christian\",\n      \"lastName\": \"ngatchou\",\n      \"email\": \"christian.nyabeyengatchou@tobania.be\"\n    },\n    \"status\": \"PLACED\",\n    \"orderItems\": [\n      {\n        \"product\": {\n          \"name\": \"mouse\",\n          \"description\": \"special mouse\"\n        },\n        \"quantity\": 1\n      }\n    ]\n  },\n  \"status\": \"PAYED\",\n  \"paymentLineList\": [\n    {\n      \"amount\": 15,\n      \"communication\": \"paycomMouse\",\n      \"creationDate\": \"2021-12-03\"\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/demo/payment",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"demo",
+								"payment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add-paymentLine",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"amount\": 15,\n  \"communication\": \"firstPayment\",\n  \"creationDate\": \"2021-12-03\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/demo/payment/1/paymentLine",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"demo",
+								"payment",
+								"1",
+								"paymentLine"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add-payment :ongoing",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"creationDate\": \"2021-12-03\",\n  \"order\": {\n    \"creationDate\": \"2021-12-03\",\n    \"customer\": {\n      \"firstName\": \"christian\",\n      \"lastName\": \"ngatchou\",\n      \"email\": \"christian.nyabeyengatchou@tobania.be\"\n    },\n    \"status\": \"PLACED\",\n    \"orderItems\": [\n      {\n        \"product\": {\n          \"name\": \"mouse\",\n          \"description\": \"special mouse\"\n        },\n        \"quantity\": 1\n      }\n    ]\n  },\n  \"status\": \"PAYED\",\n  \"paymentLineList\": [\n    {\n      \"amount\": 15,\n      \"communication\": \"paycomMouse\",\n      \"creationDate\": \"2021-12-03\"\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/demo/payment",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"demo",
+								"payment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add-payment :placed",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"creationDate\": \"2021-12-03\",\n  \"order\": {\n    \"creationDate\": \"2021-12-03\",\n    \"customer\": {\n      \"firstName\": \"christian\",\n      \"lastName\": \"ngatchou\",\n      \"email\": \"christian.nyabeyengatchou@tobania.be\"\n    },\n    \"status\": \"PLACED\",\n    \"orderItems\": [\n      {\n        \"product\": {\n          \"name\": \"mouse\",\n          \"description\": \"special mouse\"\n        },\n        \"quantity\": 1\n      }\n    ]\n  },\n  \"status\": \"PAYED\",\n  \"paymentLineList\": [\n    {\n      \"amount\": 15,\n      \"communication\": \"paycomMouse\",\n      \"creationDate\": \"2021-12-03\"\n    }\n  ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8080/demo/payment/1/paymentLine",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"demo",
+								"payment",
+								"1",
+								"paymentLine"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-payment-by-status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/demo/payment/findByStatus?status=payed,ongoing",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"demo",
+								"payment",
+								"findByStatus"
+							],
+							"query": [
+								{
+									"key": "status",
+									"value": "payed,ongoing"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "shipping-service",
+			"item": [
+				{
+					"name": "patch-parcel-status:PREPARED",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"PREPARED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/demo/parcel/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"demo",
+								"parcel",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "patch-parcel-status:IN_DELIVERY",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"PREPARED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/demo/parcel/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"demo",
+								"parcel",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "patch-parcel-status:DELIVERED",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"status\": \"DELIVERED\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8081/demo/parcel/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"demo",
+								"parcel",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

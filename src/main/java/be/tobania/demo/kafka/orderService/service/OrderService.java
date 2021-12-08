@@ -5,11 +5,13 @@ import be.tobania.demo.kafka.orderService.model.Order;
 import be.tobania.demo.kafka.orderService.model.OrderForPatch;
 import be.tobania.demo.kafka.orderService.model.Parcel;
 import be.tobania.demo.kafka.orderService.model.Payment;
-import be.tobania.demo.kafka.orderService.model.enums.PaymentStatus;
 import be.tobania.demo.kafka.orderService.model.enums.OrderStatus;
+import be.tobania.demo.kafka.orderService.model.enums.ParcelStatus;
+import be.tobania.demo.kafka.orderService.model.enums.PaymentStatus;
 import be.tobania.demo.kafka.orderService.repository.OrderRepository;
 import be.tobania.demo.kafka.orderService.service.mapper.OrderApiEntityMapper;
 import be.tobania.demo.kafka.orderService.service.mapper.OrderEntityApiMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -37,6 +39,7 @@ public class OrderService {
 
     private final KafkaTemplate<String, Order> kafkaTemplate;
 
+    private final ObjectMapper objectMapper;
 
 
     @Transactional
@@ -46,7 +49,7 @@ public class OrderService {
 
         OrderEntity saveOrder = orderRepository.saveAndFlush(orderEntities);
 
-        Order  addedOrder =  OrderEntityApiMapper.mapOrder(saveOrder);
+        Order addedOrder = OrderEntityApiMapper.mapOrder(saveOrder);
 
         publishOrder(addedOrder);
 
@@ -74,7 +77,7 @@ public class OrderService {
 
         OrderEntity patchOrder = orderRepository.save(orderEntity);
         log.info("Order patched ...");
-        Order orderPatched =  OrderEntityApiMapper.mapOrder(patchOrder);
+        Order orderPatched = OrderEntityApiMapper.mapOrder(patchOrder);
 
         publishOrder(orderPatched);
 
@@ -91,7 +94,7 @@ public class OrderService {
     }
 
 
-    public List<Order> getOrderByCustomer(Long customerRef){
+    public List<Order> getOrderByCustomer(Long customerRef) {
 
         List<OrderEntity> orderEntities = orderRepository.findOrderEntitiesByCustomerEntity_Id(customerRef);
 
@@ -104,7 +107,7 @@ public class OrderService {
     }
 
     @Async
-    public void publishOrder(Order order){
+    public void publishOrder(Order order) {
 
         log.info("start publishing order");
 
@@ -116,22 +119,36 @@ public class OrderService {
 
 
     @KafkaListener(topics = PAYMENT_TOPIC, groupId = "payment-service")
-    public void consumePayment(Payment payment)  {
+    public void consumePayment(String message) throws IOException {
+
+        Payment payment = objectMapper.readValue(message, Payment.class);
 
         log.info(String.format("Consumed new payment with status-> %s", payment.getStatus().name()));
 
-        if(payment.getStatus() == PaymentStatus.PAYED){
+        if (payment.getStatus() == PaymentStatus.PAYED) {
             Order order = payment.getOrder();
             OrderForPatch orderForPatch = new OrderForPatch();
             orderForPatch.setStatus(OrderStatus.PAYED);
 
-            patchOrder(orderForPatch,order.getId());
+            patchOrder(orderForPatch, order.getId());
         }
     }
 
     @KafkaListener(topics = SHIPPING_TOPIC, groupId = "shipping-service")
-    public void consumehipping(Parcel parcel) throws IOException {
-        log.info(String.format("#### -> Consumed new order with status-> %s", parcel.getStatus().name()));
+    public void consumeParcel(String message) throws IOException {
+
+        Parcel parcel = objectMapper.readValue(message, Parcel.class);
+
+        log.info(String.format("Consumed new order with status-> %s", parcel.getStatus().name()));
+
+        if (parcel.getStatus() == ParcelStatus.DELIVERED || parcel.getStatus() == ParcelStatus.IN_DELIVERY) {
+
+            Order order = parcel.getOrder();
+            OrderForPatch orderForPatch = new OrderForPatch();
+            orderForPatch.setStatus(parcel.getStatus() == ParcelStatus.DELIVERED ? OrderStatus.DELIVERED : OrderStatus.SHIPPED);
+            patchOrder(orderForPatch, order.getId());
+
+        }
     }
 
 }
