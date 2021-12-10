@@ -19,7 +19,6 @@ import java.util.Map;
 
 @EnableKafka
 @PropertySource("classpath:application.properties")
-@PropertySource(value = "classpath:${spring.profiles.active}.properties", ignoreResourceNotFound = true)
 @Configuration
 public class OrderServiceConsumerConfig {
 
