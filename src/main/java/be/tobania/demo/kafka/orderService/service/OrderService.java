@@ -16,9 +16,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.concurrent.ListenableFuture;
+import org.springframework.util.concurrent.ListenableFutureCallback;
 
 import java.io.IOException;
 import java.util.List;
@@ -77,6 +80,7 @@ public class OrderService {
 
         OrderEntity patchOrder = orderRepository.save(orderEntity);
         log.info("Order patched ...");
+
         Order orderPatched = OrderEntityApiMapper.mapOrder(patchOrder);
 
         publishOrder(orderPatched);
@@ -113,7 +117,20 @@ public class OrderService {
 
         kafkaTemplate.send(ORDER_TOPIC, order.getId().toString(), order);
 
-        log.info("order published");
+       /* ListenableFuture<SendResult<String, Order>> future =
+
+        future.addCallback(new ListenableFutureCallback<SendResult<String, Order>>() {
+            @Override
+            public void onSuccess(SendResult<String, Order> result) {
+                log.info(String.format("Produced event to topic %s: key = %-10s", ORDER_TOPIC, order.getId().toString(), ));
+            }
+            @Override
+            public void onFailure(Throwable ex) {
+                ex.printStackTrace();
+            }
+        });
+        */
+        log.info("order published with status %s", order.getStatus().name());
 
     }
 

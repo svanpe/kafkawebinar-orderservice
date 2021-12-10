@@ -67,7 +67,6 @@
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
     </dependencies>
-
     <build>
             <resources>
                 <resource>
