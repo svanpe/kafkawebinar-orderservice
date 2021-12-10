@@ -115,27 +115,25 @@ public class OrderService {
 
         log.info("start publishing order");
 
-        kafkaTemplate.send(ORDER_TOPIC, order.getId().toString(), order);
-
-       /* ListenableFuture<SendResult<String, Order>> future =
+        ListenableFuture<SendResult<String, Order>> future = kafkaTemplate.send(ORDER_TOPIC, order.getId().toString(), order);
 
         future.addCallback(new ListenableFutureCallback<SendResult<String, Order>>() {
             @Override
             public void onSuccess(SendResult<String, Order> result) {
-                log.info(String.format("Produced event to topic %s: key = %-10s", ORDER_TOPIC, order.getId().toString(), ));
+                log.info(String.format("Produced event to topic %s: key = %-10s", ORDER_TOPIC, order.getId().toString()));
             }
             @Override
             public void onFailure(Throwable ex) {
                 ex.printStackTrace();
             }
         });
-        */
+
         log.info("order published with status %s", order.getStatus().name());
 
     }
 
 
-    @KafkaListener(topics = PAYMENT_TOPIC, groupId = "payment-service")
+    @KafkaListener(topics = PAYMENT_TOPIC, groupId = "order-service-consumer-id")
     public void consumePayment(String message) throws IOException {
 
         Payment payment = objectMapper.readValue(message, Payment.class);
@@ -151,7 +149,7 @@ public class OrderService {
         }
     }
 
-    @KafkaListener(topics = SHIPPING_TOPIC, groupId = "shipping-service")
+    @KafkaListener(topics = SHIPPING_TOPIC, groupId = "order-service-consumer-id")
     public void consumeParcel(String message) throws IOException {
 
         Parcel parcel = objectMapper.readValue(message, Parcel.class);
