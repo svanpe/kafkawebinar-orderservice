@@ -1,11 +1,12 @@
 package be.tobania.demo.kafka.orderService.entities;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
-
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 public class OrderEntity {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private LocalDate creationDate;
@@ -24,7 +25,7 @@ public class OrderEntity {
 
     private String status;
 
-    @OneToMany(fetch = FetchType.EAGER ,cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<OrderItemEntity> orderItems;
 
 }

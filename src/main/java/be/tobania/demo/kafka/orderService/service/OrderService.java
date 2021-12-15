@@ -120,7 +120,7 @@ public class OrderService {
         future.addCallback(new ListenableFutureCallback<SendResult<String, Order>>() {
             @Override
             public void onSuccess(SendResult<String, Order> result) {
-                log.info(String.format("Produced event to topic %s: key = %-10s", ORDER_TOPIC, order.getId().toString()));
+                log.info(String.format("Produced event to order topic %s: key = %-10s", ORDER_TOPIC, order.getId().toString()));
             }
             @Override
             public void onFailure(Throwable ex) {

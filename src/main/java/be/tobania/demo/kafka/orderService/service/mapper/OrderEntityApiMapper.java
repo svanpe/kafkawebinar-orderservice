@@ -30,8 +30,8 @@ public class OrderEntityApiMapper {
            Product product = new Product();
 
            product.setId(item.getProductEntity().getId());
-           product.setDescription(item.getProductEntity().getName());
-           product.setName(item.getProductEntity().getDescription());
+           product.setName(item.getProductEntity().getName());
+           product.setDescription(item.getProductEntity().getDescription());
 
            orderItem.setProduct(product);
             return orderItem;
